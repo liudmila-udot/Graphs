@@ -1,9 +1,9 @@
 import java.util.*;
 
 /**
- * Created by Liudmila on 04.11.2017.
+ * Created by Liudmila on 19.11.2017.
  */
-public class DFS {
+public class BFS {
 
     static class Graph {
 
@@ -27,30 +27,25 @@ public class DFS {
         }
     }
 
-    public static List<Integer> dfs(Graph graph, Integer root){
+    public static List<Integer> bfs(Graph graph, Integer root){
         Set<Integer> visited = new HashSet<>();
         List<Integer> ret = new ArrayList<>();
 
-        LinkedList<Integer> stack = new LinkedList<>();
-        stack.add(root);
+        Queue<Integer> queue = new LinkedList<>();
 
+        queue.add(root);
         ret.add(root);
         visited.add(root);
 
-        while (!stack.isEmpty()){
-            Integer node = stack.peek();
+        while (!queue.isEmpty()){
+            Integer node = queue.poll();
 
             List<Integer> unvisited = getUnvisitedChildNodes(graph, visited, node);
 
-            if (!unvisited.isEmpty()){
-                Integer child = unvisited.get(0);
-                if(child != null) {
-                    ret.add(child);
-                    visited.add(child);
-                    stack.push(child);
-                }
-            } else {
-                stack.pop();
+            for (Integer unvisitedChild: unvisited){
+                queue.add(unvisitedChild);
+                ret.add(unvisitedChild);
+                visited.add(unvisitedChild);
             }
         }
 
@@ -73,6 +68,6 @@ public class DFS {
         graph.addEdge(3, 7);
         graph.addEdge(3, 8);
 
-        System.out.println(dfs(graph, 1));
+        System.out.println(bfs(graph, 1));
     }
 }
