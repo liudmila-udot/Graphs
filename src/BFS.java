@@ -1,4 +1,12 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Queue;
+import java.util.Set;
 
 /**
  * Created by Liudmila on 19.11.2017.
@@ -52,6 +60,49 @@ public class BFS {
         return ret;
     }
 
+    public static List<Integer> bfsShortestPath(Graph graph, Integer rootNode, Integer endNode){
+        Set<Integer> visited = new HashSet<>();
+        LinkedList<Integer> stack = new LinkedList<>();
+
+        Queue<Integer> queue = new LinkedList<>();
+
+        queue.add(rootNode);
+        stack.push(rootNode);
+        visited.add(rootNode);
+
+        while (!queue.isEmpty()) {
+            Integer node = queue.poll();
+
+            List<Integer> unvisited = getUnvisitedChildNodes(graph, visited, node);
+
+            for (Integer unvisitedChild : unvisited) {
+                queue.add(unvisitedChild);
+                stack.push(unvisitedChild);
+                visited.add(unvisitedChild);
+                if (Objects.equals(unvisitedChild, endNode)) {
+                    queue.clear();
+                    break;
+                }
+            }
+        }
+
+        List<Integer> ret = new ArrayList<>();
+        ret.add(endNode);
+
+        Integer node;
+        Integer currentNode = endNode;
+
+        while (!stack.isEmpty()) {
+            node = stack.pop();
+            if (graph.adj.get(currentNode).contains(node)){
+                ret.add(node);
+                currentNode = node;
+            }
+        }
+
+        return ret;
+    }
+
     public static List<Integer> getUnvisitedChildNodes(Graph graph, Set<Integer> visited, Integer parent){
         Set<Integer> copy = new HashSet<>(graph.adj.get(parent));
         copy.removeAll(visited);
@@ -69,5 +120,6 @@ public class BFS {
         graph.addEdge(3, 8);
 
         System.out.println(bfs(graph, 1));
+        System.out.println(bfsShortestPath(graph, 1, 7));
     }
 }
