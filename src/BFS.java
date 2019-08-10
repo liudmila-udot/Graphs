@@ -60,6 +60,17 @@ public class BFS {
         return ret;
     }
 
+    /**
+     * visit all elements via BSF
+     * and put them into stack
+     *
+     * after unwrap the stack to get shortest path
+     *
+     * @param graph
+     * @param rootNode
+     * @param endNode
+     * @return
+     */
     public static List<Integer> bfsShortestPath(Graph graph, Integer rootNode, Integer endNode){
         Set<Integer> visited = new HashSet<>();
         LinkedList<Integer> stack = new LinkedList<>();
