@@ -47,7 +47,7 @@ In other words, it is possible to traverse the graph from a vertex and return to
 Each edge in a weighted graph has an associated weight. The weight can be of any metric, 
 such as time, distance, size, etc. The most commonly seen “weighted map” in our daily life might be a city map.
 
-![](images/weighted_graph.png)
+<img height="150" src="images/weighted_graph.png" width="200"/>
 
 ### Tree
 Trees have direction (parent / child relationships) and don't contain cycles. They fit with in the category of Directed Acyclic Graphs (or a DAG).
