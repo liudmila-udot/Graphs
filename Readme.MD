@@ -34,7 +34,7 @@ This means that it is impossible to traverse the graph starting from any vertex 
 return to the same vertex.
 In other words, there are no loops in a DAG.
 
-![](images/directed_acyclic.png)
+<img height="300px" src="images/directed_acyclic.png" width="200px"/>
 
 ### Directed Graph with Cycles
 
