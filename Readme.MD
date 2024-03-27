@@ -68,6 +68,21 @@ So Trees are DAGs with the restriction that a child can only have one parent.
 Map<Integer, List<Integer>> adjList = new HashMap<>();
 ```
 
+```Java
+    private Map<Integer, List<Integer>> adjList; // Map to represent adjacency list
+
+    // Constructor
+    public Graph() {
+        adjList = new HashMap<>();
+    }
+
+    // Function to add an edge to the graph
+    public void addEdge(int v, int w) {
+        adjList.putIfAbsent(v, new ArrayList<>());
+        adjList.get(v).add(w); // Add w to v's list
+    }
+```
+
 ## Traverse
 
 ### BFS
@@ -82,9 +97,103 @@ Map<Integer, List<Integer>> adjList = new HashMap<>();
 
 If we imagine first element being in center or circle and the next levels as its radius.
 
+```Java
+// Function to perform BFS traversal starting from a given vertex
+    public void BFS(int startVertex) {
+        Set<Integer> visited = new HashSet<>(); // Set to keep track of visited vertices
+        LinkedList<Integer> queue = new LinkedList<>(); // Queue for BFS
+
+        visited.add(startVertex); // Mark the start vertex as visited
+        queue.add(startVertex); // Enqueue the start vertex
+
+        while (!queue.isEmpty()) {
+            int currentVertex = queue.poll(); // Dequeue a vertex
+            System.out.print(currentVertex + " ");
+
+            // Visit all adjacent vertices of the dequeued vertex
+            for (int neighbor : adjList.getOrDefault(currentVertex, Collections.emptyList())) {
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor);
+                    queue.add(neighbor);
+                }
+            }
+        }
+    }
+```
 ### DFS
 * DFS explores a graph by going as deep as possible along each branch before backtracking.
 * DFS is typically implemented using recursion or a stack data structure.
 * It's useful for topological sorting, finding strongly connected components, and detecting cycles in a graph.
+
+Recursive
+```Java
+    // Function to perform DFS traversal starting from a given vertex
+    public void DFS(int startVertex) {
+        Set<Integer> visited = new HashSet<>(); // Set to keep track of visited vertices
+        DFSUtil(startVertex, visited);
+    }
+
+    // Recursive utility function for DFS traversal
+    private void DFSUtil(int vertex, Set<Integer> visited) {
+        visited.add(vertex);
+        System.out.print(vertex + " ");
+
+        // Recursively visit all adjacent vertices of the current vertex
+        for (int neighbor : adjList.getOrDefault(vertex, Collections.emptyList())) {
+            if (!visited.contains(neighbor)) {
+                DFSUtil(neighbor, visited);
+            }
+        }
+    }
+```
+
+Using Stack
+```Java
+ // Function to perform DFS traversal starting from a given vertex
+    public void DFS(int startVertex) {
+        Set<Integer> visited = new HashSet<>(); // Set to keep track of visited vertices
+        Stack<Integer> stack = new Stack<>(); // Stack for DFS
+
+        stack.push(startVertex); // Push the start vertex onto the stack
+
+        while (!stack.isEmpty()) {
+            int currentVertex = stack.pop(); // Pop a vertex from the stack
+
+            // Visit the current vertex if it has not been visited before
+            if (!visited.contains(currentVertex)) {
+                System.out.print(currentVertex + " ");
+                visited.add(currentVertex);
+
+                // Push all adjacent vertices of the current vertex onto the stack
+                for (int neighbor : adjList.getOrDefault(currentVertex, Collections.emptyList())) {
+                    if (!visited.contains(neighbor)) {
+                        stack.push(neighbor);
+                    }
+                }
+            }
+        }
+    }
+```
+
+Test
+```Java
+public static void main(String[] args) {
+        Graph graph = new Graph();
+        graph.addEdge(0, 1);
+        graph.addEdge(0, 4);
+        graph.addEdge(1, 2);
+        graph.addEdge(1, 3);
+        graph.addEdge(1, 4);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 4);
+
+        System.out.print("BFS traversal starting from vertex 0: ");
+        graph.BFS(0);
+        System.out.println();
+
+        System.out.print("DFS traversal starting from vertex 0: ");
+        graph.DFS(0);
+    }
+```
 
 ## Topological Sort
