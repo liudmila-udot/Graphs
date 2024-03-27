@@ -18,6 +18,8 @@ It's a data structure that stores information about the connections between vert
 An undirected graph is a type of graph in which edges do not have a direction associated with them.
 In other words, the relationship between vertices (nodes) is symmetric; if there is an edge from vertex A to vertex B, there is also an edge from vertex B to vertex A.
 
+![](images/undirected_graph.png)
+
 ### Directed
 
 A directed graph, also known as a digraph, is a type of graph in which edges have a direction associated with them. 
@@ -62,10 +64,27 @@ So Trees are DAGs with the restriction that a child can only have one parent.
 
 ## Represent Graph in Java
 
+```Java
+Map<Integer, List<Integer>> adjList = new HashMap<>();
+```
+
 ## Traverse
 
 ### BFS
 
-### DFS
+* BFS explores a graph level by level, starting from a given vertex.
+* It visits all the vertices at the current level before moving to the vertices at the next level.
+* BFS is typically implemented using a queue data structure.
+* It's useful for finding the shortest path in an unweighted graph.
+* BFS in Java can be implemented using a queue, to keep track of vertices to visit next.
 
-## Topo Sort
+![](images/bfs_circle.png)
+
+If we imagine first element being in center or circle and the next levels as its radius.
+
+### DFS
+* DFS explores a graph by going as deep as possible along each branch before backtracking.
+* DFS is typically implemented using recursion or a stack data structure.
+* It's useful for topological sorting, finding strongly connected components, and detecting cycles in a graph.
+
+## Topological Sort
