@@ -99,7 +99,7 @@ If we imagine first element being in center or circle and the next levels as its
 
 ```Java
 // Function to perform BFS traversal starting from a given vertex
-    public void BFS(int startVertex) {
+    public void bfs(Map<Integer, List<Integer>> adjList, int startVertex) {
         Set<Integer> visited = new HashSet<>(); // Set to keep track of visited vertices
         LinkedList<Integer> queue = new LinkedList<>(); // Queue for BFS
 
@@ -128,20 +128,20 @@ If we imagine first element being in center or circle and the next levels as its
 Recursive
 ```Java
     // Function to perform DFS traversal starting from a given vertex
-    public void DFS(int startVertex) {
+    public void dfs(Map<Integer, List<Integer>> adjList, int startVertex) {
         Set<Integer> visited = new HashSet<>(); // Set to keep track of visited vertices
-        DFSUtil(startVertex, visited);
+        dfs(adjList, startVertex, visited);
     }
 
     // Recursive utility function for DFS traversal
-    private void DFSUtil(int vertex, Set<Integer> visited) {
+    private void dfs(Map<Integer, List<Integer>> adjList, int vertex, Set<Integer> visited) {
         visited.add(vertex);
         System.out.print(vertex + " ");
 
         // Recursively visit all adjacent vertices of the current vertex
         for (int neighbor : adjList.getOrDefault(vertex, Collections.emptyList())) {
             if (!visited.contains(neighbor)) {
-                DFSUtil(neighbor, visited);
+                dfs(adjList, neighbor, visited);
             }
         }
     }
@@ -150,7 +150,7 @@ Recursive
 Using Stack
 ```Java
  // Function to perform DFS traversal starting from a given vertex
-    public void DFS(int startVertex) {
+    public void dfs(Map<Integer, List<Integer>> adjList, int startVertex) {
         Set<Integer> visited = new HashSet<>(); // Set to keep track of visited vertices
         Stack<Integer> stack = new Stack<>(); // Stack for DFS
 
@@ -188,12 +188,51 @@ public static void main(String[] args) {
         graph.addEdge(3, 4);
 
         System.out.print("BFS traversal starting from vertex 0: ");
-        graph.BFS(0);
+        bsf(graph.getAdjList(), 0);
         System.out.println();
 
         System.out.print("DFS traversal starting from vertex 0: ");
-        graph.DFS(0);
+        dsf(graph.getAdjList(), 0);
     }
 ```
+
+## Number of Connected Components
+
+We can do DSF of BSF from each key in adjacency list and store visited into shared set:
+when adjacency list key is not visited yet - we increase number of connected components by one.
+
+
+```java
+    public int numberOfConnectedComponentsBfs(Map<Integer, List<Integer>> adj) {
+        Set<Integer> visited = new HashSet<>();
+        int ret = 0;
+        for (Integer key : adj.keySet()) {
+            if (!visited.contains(key)) {
+                ret++;
+            }
+            bfs(adj, key, visited);
+        }
+        return ret;
+    }
+
+    public void bfs(Map<Integer, List<Integer>> adj, int startVertex, Set<Integer> visited) {
+        LinkedList<Integer> queue = new LinkedList<>(); // Queue for BFS
+
+        visited.add(startVertex); // Mark the start vertex as visited
+        queue.add(startVertex); // Enqueue the start vertex
+
+        while (!queue.isEmpty()) {
+            int currentVertex = queue.poll(); // Dequeue a vertex
+
+            // Visit all adjacent vertices of the dequeued vertex
+            for (int neighbor : adj.getOrDefault(currentVertex, Collections.emptyList())) {
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor);
+                    queue.add(neighbor);
+                }
+            }
+        }
+    }
+```    
 
 ## Topological Sort
