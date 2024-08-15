@@ -2,6 +2,8 @@
 
 A graph is a data structure that consists of nodes (vertices) and edges that connect these nodes.
 
+Link to nice cheatsheet: [LeetCode Discuss](https://leetcode.com/tag/topological-sort/discuss/3900838/%22Mastering-Graph-Algorithms%3A-A-Comprehensive-DSA-Graph-Common-Question-Patterns-CheatSheet%22)
+
 ![](./images/graph.png)
 
 ## How to represent? Adjacency list
@@ -272,3 +274,48 @@ when adjacency list key is not visited yet - we increase number of connected com
 ```
 
 ## Topological Sort
+
+Topological sort or topological ordering of a directed graph is a linear ordering of its vertices such that for every directed edge (u,v) 
+from vertex u to vertex v, u comes before v in the ordering.
+
+A topological ordering is possible if and only if the graph has no directed cycles, that is, if it is a directed acyclic graph (DAG). 
+Any DAG has at least one topological ordering.
+
+The canonical application of topological sorting is in scheduling a sequence of jobs or tasks based on their dependencies. 
+The jobs are represented by vertices, and there is an edge from x to y if job x must be completed before job y can be started 
+(for example, when washing clothes, the washing machine must finish before we put the clothes in the dryer). 
+Then, a topological sort gives an order in which to perform the jobs. 
+
+### Kahn's algorithm
+
+![](images/topo_sort.png)
+
+https://en.wikipedia.org/w/index.php?title=Topological_sorting
+Works by choosing vertices in the same order as the eventual topological sort. First, find a list of "start nodes" that have no incoming edges and remove
+corresponding edges from the graph. Then repeat.
+
+No incoming edges means that in-degree is 0.
+
+```
+L ← Empty list that will contain the sorted elements
+S ← Set of all nodes with no incoming edge
+
+while S is not empty do
+    remove a node n from S
+    add n to L
+    for each node m with an edge e from n to m do
+        remove edge e from the graph
+        if m has no other incoming edges then
+            insert m into S
+
+if graph has edges then
+    return error   (graph has at least one cycle)
+else 
+    return L   (a topologically sorted order)
+```
+
+```java
+
+```
+
+### DFS
