@@ -315,7 +315,39 @@ else
 ```
 
 ```java
+    private static int[] topoSort(Map<Integer, List<Integer>> adjList, int[] indegree) {
+        Queue<Integer> queue = new LinkedList<>();
 
+        for (int i = 0; i <= indegree.length - 1; i++) {
+        if (indegree[i] == 0) {
+        queue.add(i);
+        }
+        }
+
+        List<Integer> ret = new ArrayList<>();
+
+        while (!queue.isEmpty()) {
+        int current = queue.poll();
+        ret.add(current);
+
+        for (Integer prerequisiteFor : adjList.getOrDefault(current, new ArrayList<>())) {
+        indegree[prerequisiteFor]--;
+
+        if (indegree[prerequisiteFor] == 0) {
+        queue.add(prerequisiteFor);
+        }
+        }
+        }
+
+        if (ret.size() == indegree.length) {
+        return ret
+        .stream()
+        .mapToInt(Integer::valueOf)
+        .toArray();
+        }
+
+        return new int[0];
+        }
 ```
 
 ### DFS
