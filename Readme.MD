@@ -358,8 +358,8 @@ The algorithm loops through each node of the graph, in an arbitrary order,
 initiating a depth-first search that terminates when it hits any node that has already been visited since 
 the beginning of the topological sort or the node has no outgoing edge.
 
-Note that output is build in the reverse order. Node is added to the output only after all its descendants(that depends on it)
-are added.
+Note that output is build in the reverse order. Node is added to the output only after all its descendants 
+(that depends on it) are added. For example on picture - node 0 will be added the last.
 
 ```java
 public class DfsTopoSort {
