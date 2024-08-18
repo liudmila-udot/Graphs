@@ -361,7 +361,7 @@ the beginning of the topological sort or the node has no outgoing edge.
 Note that output is build in the reverse order. Node is added to the output only after all its descendants(that depends on it)
 are added.
 
-```
+```java
 public class DfsTopoSort {
     public static List<Integer> topoSortDfs(Map<Integer, List<Integer>> adjList) {
         Set<Integer> visited = new HashSet<>(); // Set to keep track of visited vertices
