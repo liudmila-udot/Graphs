@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * https://leetcode.com/problems/course-schedule-ii/
@@ -9,6 +10,13 @@ public class CourseScheduleII {
         Map<Integer, List<Integer>> adjList = toAdjList(prerequisites);
         int[] indegree = getIndegree(numCourses, adjList);
         return topoSort(adjList, indegree);
+    }
+
+    public static int[] findOrderDfs(int numCourses, int[][] prerequisites) {
+        Map<Integer, List<Integer>> adjList = toAdjList(prerequisites);
+        return topoSortDfs(adjList, numCourses).stream()
+                .mapToInt(Integer::valueOf)
+                .toArray();
     }
 
     private static int[] topoSort(Map<Integer, List<Integer>> adjList, int[] indegree) {
@@ -69,9 +77,46 @@ public class CourseScheduleII {
         return adjList;
     }
 
+    public static List<Integer> topoSortDfs(Map<Integer, List<Integer>> adjList, int numCourses) {
+        Set<Integer> visited = new HashSet<>(); // Set to keep track of visited vertices
+        List<Integer> ret = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++) {
+            Set<Integer> cyclesDetection = new HashSet<>();
+            AtomicBoolean cycleFound = new AtomicBoolean(false);
+            topoSortUtil(adjList, i, visited, cyclesDetection, cycleFound, ret);
+            if (cycleFound.get()) {
+                return new ArrayList<>();
+            }
+        }
+        Collections.reverse(ret);
+        return ret;
+    }
+
+    private static void topoSortUtil(Map<Integer, List<Integer>> adjList,
+                                     Integer vertex,
+                                     Set<Integer> visited,
+                                     Set<Integer> cycleDetection,
+                                     AtomicBoolean cycleFound,
+                                     List<Integer> ret) {
+        if (visited.contains(vertex)) {
+            return;
+        }
+        if (cycleDetection.contains(vertex)) {
+            cycleFound.set(true);
+            return;
+        }
+        cycleDetection.add(vertex);
+        for (int neighbor : adjList.getOrDefault(vertex, Collections.emptyList())) {
+            topoSortUtil(adjList, neighbor, visited, cycleDetection, cycleFound, ret);
+        }
+        visited.add(vertex);
+        ret.add(vertex);
+    }
+
     public static void main(String[] args) {
         int numCourses = 4;
         int[][] prerequisites = new int[][]{{1, 0}, {2, 0}, {3, 1}, {3, 2}};
+        System.out.println(Arrays.toString(findOrderDfs(numCourses, prerequisites)));
         System.out.println(Arrays.toString(findOrder(numCourses, prerequisites)));
     }
 }

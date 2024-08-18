@@ -353,3 +353,50 @@ public class KahnsTopoSort {
 ```
 
 ### DFS
+
+The algorithm loops through each node of the graph, in an arbitrary order, 
+initiating a depth-first search that terminates when it hits any node that has already been visited since 
+the beginning of the topological sort or the node has no outgoing edge.
+
+Note that output is build in the reverse order. Node is added to the output only after all its descendants(that depends on it)
+are added.
+
+```
+public class DfsTopoSort {
+    public static List<Integer> topoSortDfs(Map<Integer, List<Integer>> adjList) {
+        Set<Integer> visited = new HashSet<>(); // Set to keep track of visited vertices
+        List<Integer> ret = new ArrayList<>();
+        for (Integer i : adjList.keySet()) {
+            Set<Integer> cyclesDetection = new HashSet<>();
+            AtomicBoolean cycleFound = new AtomicBoolean(false);
+            topoSortUtil(adjList, i, visited, cyclesDetection, cycleFound, ret);
+            if (cycleFound.get()) {
+                return new ArrayList<>();
+            }
+        }
+        Collections.reverse(ret);
+        return ret;
+    }
+
+    private static void topoSortUtil(Map<Integer, List<Integer>> adjList,
+                                     Integer vertex,
+                                     Set<Integer> visited,
+                                     Set<Integer> cycleDetection,
+                                     AtomicBoolean cycleFound,
+                                     List<Integer> ret) {
+        if (visited.contains(vertex)) {
+            return;
+        }
+        if (cycleDetection.contains(vertex)) {
+            cycleFound.set(true);
+            return;
+        }
+        cycleDetection.add(vertex);
+        for (int neighbor : adjList.getOrDefault(vertex, Collections.emptyList())) {
+            topoSortUtil(adjList, neighbor, visited, cycleDetection, cycleFound, ret);
+        }
+        visited.add(vertex);
+        ret.add(vertex);
+    }
+}
+```

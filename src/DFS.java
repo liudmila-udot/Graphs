@@ -27,7 +27,7 @@ public class DFS {
         }
     }
 
-    public static List<Integer> dfs(Graph graph, Integer root){
+    public static List<Integer> dfs(Map<Integer, List<Integer>> adjList, Integer root){
         Set<Integer> visited = new HashSet<>();
         List<Integer> ret = new ArrayList<>();
 
@@ -40,7 +40,7 @@ public class DFS {
         while (!stack.isEmpty()){
             Integer node = stack.peek();
 
-            List<Integer> unvisited = getUnvisitedChildNodes(graph, visited, node);
+            List<Integer> unvisited = getUnvisitedChildNodes(adjList, visited, node);
 
             if (!unvisited.isEmpty()){
                 Integer child = unvisited.get(0);
@@ -57,10 +57,31 @@ public class DFS {
         return ret;
     }
 
-    public static List<Integer> getUnvisitedChildNodes(Graph graph, Set<Integer> visited, Integer parent){
-        Set<Integer> copy = new HashSet<>(graph.adj.get(parent));
+    public static List<Integer> getUnvisitedChildNodes(Map<Integer, List<Integer>> adjList, Set<Integer> visited, Integer parent){
+        Set<Integer> copy = new HashSet<>(adjList.get(parent));
         copy.removeAll(visited);
-        return new ArrayList<Integer>(copy);
+        return new ArrayList<>(copy);
+    }
+
+    // Function to perform DFS traversal starting from a given vertex
+    public static List<Integer> dfsRecursive(Map<Integer, List<Integer>> adjList, Integer startVertex) {
+        Set<Integer> visited = new HashSet<>(); // Set to keep track of visited vertices
+        List<Integer> ret = new ArrayList<>();
+        dfsRecursiveUtil(adjList, startVertex, visited, ret);
+        return ret;
+    }
+
+    // Recursive utility function for DFS traversal
+    private static void dfsRecursiveUtil(Map<Integer, List<Integer>> adjList, Integer vertex, Set<Integer> visited, List<Integer> ret) {
+        visited.add(vertex);
+        ret.add(vertex);
+
+        // Recursively visit all adjacent vertices of the current vertex
+        for (int neighbor : adjList.getOrDefault(vertex, Collections.emptyList())) {
+            if (!visited.contains(neighbor)) {
+                dfsRecursiveUtil(adjList, neighbor, visited, ret);
+            }
+        }
     }
 
     public static void main(String[] args) {
@@ -73,6 +94,6 @@ public class DFS {
         graph.addEdge(3, 7);
         graph.addEdge(3, 8);
 
-        System.out.println(dfs(graph, 1));
+        System.out.println(dfs(graph.adj, 1));
     }
 }
