@@ -273,6 +273,10 @@ when adjacency list key is not visited yet - we increase number of connected com
     }
 ```
 
+## Cycle In Directed Graph
+
+## Cycle In Undirected Graph
+
 ## Topological Sort
 
 Topological sort or topological ordering of a directed graph is a linear ordering of its vertices such that for every directed edge (u,v) 
@@ -397,6 +401,54 @@ public class DfsTopoSort {
         }
         visited.add(vertex);
         ret.add(vertex);
+    }
+}
+```
+
+## Grids
+
+[https://leetcode.com/problems/number-of-islands](https://leetcode.com/problems/number-of-islands)
+
+Solution with grid alteration.
+
+```java
+public class NumOfIslands {
+
+    public static int[][] OFFSETS = new int[][]{{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
+
+    public int numIslands(char[][] grid) {
+
+        int numberOfIslands = 0;
+        Queue<int[]> queue = new LinkedList<>();
+
+        for (int i = 0; i <= grid.length - 1; i++) {
+            for (int j = 0; j <= grid[0].length - 1; j++) {
+
+                if (grid[i][j] == '1') {
+                    numberOfIslands++;
+                    grid[i][j] = '0';
+                    queue.add(new int[]{i, j});
+
+                    while (!queue.isEmpty()) {
+                        int[] current = queue.poll();
+
+
+                        for (int[] offset : OFFSETS) {
+                            int row = current[0] + offset[0];
+                            int col = current[1] + offset[1];
+                            if (row >= 0 && row <= grid.length - 1 &&
+                                    col >= 0 && col <= grid[0].length - 1 &&
+                                    grid[row][col] == '1') {
+                                grid[row][col] = '0';
+                                queue.offer(new int[]{row, col});
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return numberOfIslands;
     }
 }
 ```
